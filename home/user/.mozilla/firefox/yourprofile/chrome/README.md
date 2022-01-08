@@ -1,4 +1,4 @@
-# minimal-functional-fox
+# Copy of @mut-ex/minimal-functional-fox with my configuration!
 
 > ###### *A minimal, yet functional configuration for Firefox!*
 
