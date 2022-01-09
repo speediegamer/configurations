@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Small, perhaps quite useless bash script to redirect dmenu from /usr/bin to ~/.config/dmenu/dmenu
-
-~/.config/dmenu/dmenu
-
-exit
