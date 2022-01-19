@@ -1,4 +1,6 @@
-# dmenu - dynamic menu
+# dmenu
+# Slighly modified makefile because I wanna have my dmenu binary in .config/dmenu
+
 # See LICENSE file for copyright and license details.
 
 include config.mk
@@ -42,8 +44,8 @@ dist: clean
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f dmenu dmenu_path dmenu_run stest $(DESTDIR)$(PREFIX)/bin
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu
+	cp -f dmenu_path dmenu_run stest $(DESTDIR)$(PREFIX)/bin
+	cp -f 
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_path
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_run
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/stest
@@ -52,13 +54,11 @@ install: all
 	sed "s/VERSION/$(VERSION)/g" < stest.1 > $(DESTDIR)$(MANPREFIX)/man1/stest.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stest.1
-
 uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu\
-		$(DESTDIR)$(PREFIX)/bin/dmenu_path\
-		$(DESTDIR)$(PREFIX)/bin/dmenu_run\
-		$(DESTDIR)$(PREFIX)/bin/stest\
-		$(DESTDIR)$(MANPREFIX)/man1/dmenu.1\
-		$(DESTDIR)$(MANPREFIX)/man1/stest.1
+	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu_path\
+		  $(DESTDIR)$(PREFIX)/bin/dmenu_run\
+		  $(DESTDIR)$(PREFIX)/bin/stest\
+		  $(DESTDIR)$(MANPREFIX)/man1/dmenu.1\
+		  $(DESTDIR)$(MANPREFIX)/man1/stest.1
 
 .PHONY: all options clean dist install uninstall
