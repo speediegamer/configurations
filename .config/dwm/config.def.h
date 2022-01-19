@@ -20,6 +20,8 @@ static const char col_gray2[]       = "#222222"; // dwm middle background
 static const char col_gray3[]       = "#bbbbbb"; // application title bar/font for norm
 static const char col_gray4[]       = "#eeeeee"; // dwm text/font for selected
 static const char col_border[]      = "#81a1c1"; // dwm window border (old color = 5757FF)
+static const unsigned int baralpha = 0xd0;
+static const unsigned int borderalpha = OPAQUE;
 static const float mfact            = 0.55;
 static const char *tags[] = { "  web", "  sh", "  chat", "  music", "  code", " doc", "  pkg", " video", "  misc" };
 static const char *alttags[] = { "[  web]", "[  sh]", "[  chat]", "[  music]", "[  code]", "[ doc]", "[  pkg]", "[  video]", "[  misc]" };
@@ -32,6 +34,12 @@ static const char *colors[][3]      = {
 	[SchemeNorm] = { col_gray3, col_dgray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_gray2, col_border },
         /*               text         bg         border */ 
+};
+
+static const unsigned int alphas[][3]      = {
+       /*               fg      bg        border     */
+       [SchemeNorm] = { OPAQUE, baralpha, borderalpha },
+       [SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
 static const Rule rules[] = {
@@ -62,10 +70,11 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("exec flameshot gui") },
         { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("~/.config/surf/surf https://duckduckgo.com") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("~/.config/surf/surf") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim") },
         { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall WebKitWebProcess") },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/discord/discord") },
+        { MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("~/.config/surf/surf invidious.namazso.eu") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } }, 
@@ -76,7 +85,6 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_e,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY|ControlMask,           XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_d,      focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_d,      tagmon,         {.i = -1 } },
