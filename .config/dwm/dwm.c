@@ -92,7 +92,7 @@ struct Client {
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
 	int bw, oldbw;
 	unsigned int tags;
-	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
+	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, CenterThisWindow;
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -139,6 +139,7 @@ typedef struct {
 	const char *title;
 	unsigned int tags;
 	int isfloating;
+	int CenterThisWindow;
 	int monitor;
 } Rule;
 
@@ -288,6 +289,7 @@ applyrules(Client *c)
 
 	/* rule matching */
 	c->isfloating = 0;
+        c->CenterThisWindow = 0;
 	c->tags = 0;
 	XGetClassHint(dpy, c->win, &ch);
 	class    = ch.res_class ? ch.res_class : broken;
@@ -300,6 +302,7 @@ applyrules(Client *c)
 		&& (!r->instance || strstr(instance, r->instance)))
 		{
 			c->isfloating = r->isfloating;
+			c->CenterThisWindow = r->CenterThisWindow;
 			c->tags |= r->tags;
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
@@ -418,7 +421,7 @@ attachstack(Client *c)
 void
 buttonpress(XEvent *e)
 {
-	unsigned int i, x, click;
+	unsigned int i, x, click, occ;
 	Arg arg = {0};
 	Client *c;
 	Monitor *m;
@@ -432,9 +435,13 @@ buttonpress(XEvent *e)
 		focus(NULL);
 	}
 	if (ev->window == selmon->barwin) {
-		i = x = 0;
+		i = x = occ = 0;
+		/* Bitmask of occupied tags */
+		for (c = m->clients; c; c = c->next)
+			occ |= c->tags;
+
 		do
-			x += TEXTW(tags[i]);
+			x += TEXTW(occ & 1 << i ? alttags[i] : tags[i]);
 		while (ev->x >= x && ++i < LENGTH(tags));
 		if (i < LENGTH(tags)) {
 			click = ClkTagBar;
@@ -702,6 +709,7 @@ drawbar(Monitor *m)
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
+	const char *tagtext;
 	Client *c;
 
 	/* draw status first so it can be overdrawn by tags later */
@@ -718,13 +726,10 @@ drawbar(Monitor *m)
 	}
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
-		w = TEXTW(tags[i]);
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-		if (occ & 1 << i)
-			drw_rect(drw, x + boxs, boxs, boxw, boxw,
-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-				urg & 1 << i);
+		tagtext = occ & 1 << i ? alttags[i] : tags[i];
+		w = TEXTW(tagtext);
+ 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tagtext, urg & 1 << i);
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
@@ -1711,6 +1716,13 @@ tile(Monitor *m)
 			resize(c, m->wx + mw + m->gappx, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappx, h - (2*c->bw), 0);
 			ty += HEIGHT(c) + m->gappx;
 		}
+
+	if (n == 1 && selmon->sel->CenterThisWindow)
+        resizeclient(selmon->sel,
+                (selmon->mw - selmon->mw * 0.5) / 2,
+                (selmon->mh - selmon->mh * 0.5) / 2,
+                selmon->mw * 0.5,
+                selmon->mh * 0.5);
 }
 
 void
