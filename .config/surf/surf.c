@@ -83,6 +83,7 @@ typedef enum {
 	Style,
 	WebGL,
 	ZoomLevel,
+	ClipboardNotPrimary,
 	ParameterLast
 } ParamName;
 
@@ -228,6 +229,7 @@ static void toggle(Client *c, const Arg *a);
 static void togglefullscreen(Client *c, const Arg *a);
 static void togglecookiepolicy(Client *c, const Arg *a);
 static void toggleinspector(Client *c, const Arg *a);
+static void toggletitle(Client *c, const Arg *a);
 static void find(Client *c, const Arg *a);
 
 /* Buttons */
@@ -298,6 +300,7 @@ static ParamName loadcommitted[] = {
 	SpellLanguages,
 	Style,
 	ZoomLevel,
+	ClipboardNotPrimary,
 	ParameterLast
 };
 
@@ -586,6 +589,8 @@ loaduri(Client *c, const Arg *a)
 		if (!stat(apath, &st) && (path = realpath(apath, NULL))) {
 			url = g_strdup_printf("file://%s", path);
 			free(path);
+                } else if (*uri == ' ') {
+                        url = g_strdup_printf("%s%s", searchengine, uri + 1);
 		} else {
 			url = g_strdup_printf("http://%s", uri);
 		}
@@ -657,13 +662,19 @@ updatetitle(Client *c)
 		gettogglestats(c);
 		getpagestats(c);
 
-		if (c->progress != 100)
-			title = g_strdup_printf("[%i%%] %s:%s | %s",
-			        c->progress, togglestats, pagestats, name);
-		else
-			title = g_strdup_printf("%s:%s | %s",
-			        togglestats, pagestats, name);
-
+		if (c->progress != 100) {
+            if (!extendedtitle)
+                title = g_strdup_printf("[%i%%] %s", c->progress, name);
+            else
+			    title = g_strdup_printf("[%i%%] %s:%s | %s",
+						c->progress, togglestats, pagestats, name);
+        } else {
+            if (!extendedtitle)
+                title = g_strdup_printf("%s", name);
+            else
+			    title = g_strdup_printf("%s:%s | %s",
+						togglestats, pagestats, name);
+        }
 		gtk_window_set_title(GTK_WINDOW(c->win), title);
 		g_free(title);
 	} else {
@@ -1818,13 +1829,18 @@ showcert(Client *c, const Arg *a)
 void
 clipboard(Client *c, const Arg *a)
 {
+	/* User defined choice of selection, see config.h */
+	GdkAtom	selection = GDK_SELECTION_PRIMARY;
+	if (curconfig[ClipboardNotPrimary].val.i > 0)
+		selection = GDK_SELECTION_CLIPBOARD;
+
 	if (a->i) { /* load clipboard uri */
 		gtk_clipboard_request_text(gtk_clipboard_get(
-		                           GDK_SELECTION_PRIMARY),
+                                          selection),
 		                           pasteuri, c);
 	} else { /* copy uri */
 		gtk_clipboard_set_text(gtk_clipboard_get(
-		                       GDK_SELECTION_PRIMARY), c->targeturi
+		                       selection), c->targeturi
 		                       ? c->targeturi : geturi(c), -1);
 	}
 }
@@ -1924,6 +1940,13 @@ toggleinspector(Client *c, const Arg *a)
 		webkit_web_inspector_close(c->inspector);
 	else if (curconfig[Inspector].val.i)
 		webkit_web_inspector_show(c->inspector);
+}
+
+void
+toggletitle(Client *c, const Arg *a)
+{
+	extendedtitle = !extendedtitle;
+	updatetitle(c);
 }
 
 void
@@ -2090,6 +2113,9 @@ main(int argc, char *argv[])
 	case 'e':
 		embed = strtol(EARGF(usage()), NULL, 0);
 		break;
+    case 'E':
+        extendedtitle = strtol(EARGF(usage()), NULL, 0);
+        break;
 	case 'f':
 		defconfig[RunInFullscreen].val.i = 0;
 		defconfig[RunInFullscreen].prio = 2;
