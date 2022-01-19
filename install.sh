@@ -22,6 +22,8 @@ else
     perms=sudo
 fi
 
+$perms echo "Authenticated successfully"
+
 echo "speedie's configuration installer: version 0.1"
 echo "Before continuing, please make sure you meet these requirements:"
 echo
