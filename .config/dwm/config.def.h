@@ -8,28 +8,28 @@
 
 // That's it. Have a good day!
 
-static const unsigned int borderpx  = 2;
-static const unsigned int snap      = 32;
-static const unsigned int gappx     = 7;
-static const int showbar            = 1;
-static const int topbar             = 1;
-static const char *fonts[]          = { "Terminus:size=10", "fontawesome:size=12" };
-static const char dmenufont[]       = "Terminus:size=10";
-static const char col_dgray1[]      = "#222222"; // dwm dark bg & slstatus bg
-static const char col_gray2[]       = "#222222"; // dwm middle background
-static const char col_gray3[]       = "#bbbbbb"; // application title bar/font for norm
-static const char col_gray4[]       = "#eeeeee"; // dwm text/font for selected
-static const char col_border[]      = "#81a1c1"; // dwm window border (old color = 5757FF)
-static const unsigned int baralpha = 0xd0;
-static const unsigned int borderalpha = OPAQUE;
-static const float mfact            = 0.55;
+static const unsigned int borderpx            = 2;
+static const unsigned int snap                = 32;
+static const unsigned int gappx               = 7;
+static const int showbar                      = 1;
+static const int topbar                       = 1;
+static const char *fonts[]                    = { "Terminus:size=10", "fontawesome:size=12" };
+static const char dmenufont[]                 = "Terminus:size=10";
+static const char col_dgray1[]                = "#222222"; // dwm dark bg & slstatus bg
+static const char col_gray2[]                 = "#222222"; // dwm middle background
+static const char col_gray3[]                 = "#bbbbbb"; // application title bar/font for norm
+static const char col_gray4[]                 = "#eeeeee"; // dwm text/font for selected
+static const char col_border[]                = "#81a1c1"; // dwm window border (old color = 5757FF)
+static const unsigned int baralpha            = 0xd0;
+static const unsigned int borderalpha         = OPAQUE;
+static const float mfact                      = 0.50;
+static const int nmaster                      = 1;
+static const int resizehints                  = 1;
+static char dmenumon[2]                       = "0";
+static const char *dmenucmd[]                 = { NULL };
+static const char *termcmd[]                  = { NULL };
 static const char *tags[] = { "  web", "  sh", "  chat", "  music", "  code", " doc", "  pkg", " video", "  misc" };
 static const char *alttags[] = { "[  web]", "[  sh]", "[  chat]", "[  music]", "[  code]", "[ doc]", "[  pkg]", "[  video]", "[  misc]" };
-static char dmenumon[2] = "0";
-static const char *dmenucmd[] = { NULL };
-static const char *termcmd[]  = { NULL };
-static const int nmaster            = 1;
-static const int resizehints        = 1;
 static const char *colors[][3]      = {
 	[SchemeNorm] = { col_gray3, col_dgray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_gray2, col_border },
@@ -44,14 +44,13 @@ static const unsigned int alphas[][3]      = {
 
 static const Rule rules[] = {
 	/* class       instance    title       tags mask     isfloating   monitor */
-        { "st",        NULL,       NULL,       3 << 9,        0,           -1 },
+    { "st",        NULL,       NULL,       3 << 9,        0,           -1 },
 	{ "Surf",      NULL,       NULL,       2 << 9,        0,           -1 },
-	{ "Surf",      NULL,       "broken",   4 << 9,        0,           -1 },
 };
 
 #include "layouts.c"
 static const Layout layouts[] = {
-        { "tile",    tile },
+    { "tile",    tile },
 	{ "float",   NULL },
 	{ "mono",    monocle },
 	{ "grid",    grid },
@@ -69,12 +68,20 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("~/.config/dmenu/dmenu_run") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("exec flameshot gui") },
-        { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
+    { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("~/.config/surf/surf") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim") },
-        { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall WebKitWebProcess") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/discord/discord") },
-        { MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("~/.config/surf/surf invidious.namazso.eu") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall WebKitWebProcess") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/discord/discord") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("~/.config/surf/surf invidious.namazso.eu") },
+	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st bpytop") },
+	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
+    { MODKEY,                       XK_3,      spawn,          SHCMD("pulsemixer --unmute && pulsemixer --change-volume +2") },
+    { MODKEY,                       XK_2,      spawn,          SHCMD("pulsemixer --unmute && pulsemixer --change-volume -2") },
+    { MODKEY,                       XK_1,      spawn,          SHCMD("pulsemixer --mute") },
+	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st pulsemixer") },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp /mnt/storage01/Music/Playlist") }, 
+	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } }, 
@@ -105,7 +112,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("~/.config/st/st") },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
