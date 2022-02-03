@@ -1,0 +1,1 @@
+www-client/firefox -dbus -clang -debug geckodriver hardened -jack -pulseaudio -wayland -wifi
