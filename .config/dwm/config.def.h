@@ -1,47 +1,18 @@
 // speedie's Dynamic Window Manager configuration file!
 // https://github.com/speediegamer/configurations
-//
-// REQUIRED DEPENDENCIES: media-fonts/terminus-font, media-fonts/fontawesome
-// If you want it to be slightly usable: 
-// * Make sure a dmenu binary is available in "~/.config/dmenu"
-// * Make sure a st binary is available in "~/.config/st"
-// * Pulsemixer (for volume controls) 
-// * Pulseaudio/Pipewire (for the audio itself) 
-//
-// Included shortcuts for:
-// * ~/.config/surf/surf (suckless surf web browser by pressing MOD+SHIFT+w)
-// * /usr/bin/obs (OBS Studio by pressing MOD+SHIFT+o)
-// * /usr/bin/mocp (Music On Console Player by pressing MOD+SHIFT+m)
-// * /usr/bin/discord (Surfcord suckless surf based Discord client by pressing MOD+SHIFT+d)
-// * ~/.config/st/st (st terminal by pressing MOD+SHIFT+ENTER)
-// * /usr/bin/nvim (neovim by pressing MOD+SHIFT+t)
-// * /usr/bin/fff (fucking fast file manager by pressing MOD+SHIFT+f)
-// * Mute pipewire/pulseaudio (by pressing MOD+1)
-// * Lower pipewire/pulseaudio volume (by pressing MOD+2)
-// * Increase pipewire/pulseaudio volume (by pressing MOD+3)
-// * Invidious (in the surf browser by pressing MOD+SHIFT+y)
-// * Killing all surf instances (by pressing MOD+SHIFT+p)
-// * Killing the current window (by pressing MOD+SHIFT+q)
-// * Run ~/.config/dmenu/dmenu (by pressing MOD+SHIFT+comma) 
-// * Patched with fullscreen so you can go fullscreen (by pressing MOD+SHIFT+f)
-// * Switch tag (by pressing MOD+SHIFT+number between 1 and 9)
-// * Find out the rest by reading the source code.
-
-// That's it. Have a good day!
-
-static const unsigned int borderpx            = 2;
+static const unsigned int borderpx            = 1;
 static const unsigned int snap                = 32;
-static const unsigned int gappx               = 7;
+static const unsigned int gappx               = 4;
 static const int showbar                      = 1;
 static const int topbar                       = 1;
 static const char *fonts[]                    = { "Terminus:size=10", "fontawesome:size=12" };
 static const char dmenufont[]                 = "Terminus:size=10";
 static const char col_background[]            = "#222222"; // dwm dark bg & slstatus bg
-static const char col_backgroundmid[]         = "#222222"; // dwm middle background
+static const char col_backgroundmid[]         = "#4c566a"; // dwm middle background
 static const char col_textnorm[]              = "#bbbbbb"; // application title bar/font for norm
 static const char col_textsel[]               = "#eeeeee"; // dwm text/font for selected
-static const char col_windowbordernorm[]      = "#5e81ac"; // dwm norm window border
-static const char col_windowbordersel[]       = "#81a1c1"; // dwm sel window border
+static const char col_windowbordernorm[]      = "#5757ff"; // dwm norm window border
+static const char col_windowbordersel[]       = "#5757ff"; // dwm sel window border
 static const unsigned int baralpha            = 0xd0;
 static const unsigned int borderalpha         = OPAQUE;
 static const float mfact                      = 0.50;
@@ -50,8 +21,8 @@ static const int resizehints                  = 1;
 static char dmenumon[2]                       = "0";
 static const char *dmenucmd[]                 = { NULL };
 static const char *termcmd[]                  = { NULL };
-static const char *tags[] = { "  web", "  sh", "  chat", "  music", "  code", " doc", "  pkg", " video", "  misc" };
-static const char *alttags[] = { "[  web]", "[  sh]", "[  chat]", "[  music]", "[  code]", "[ doc]", "[  pkg]", "[  video]", "[  misc]" };
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+static const char *alttags[] = { "[]", "[]", "[]", "[]", "[]", "[]", "[]", "[]", "[]" };
 static const char *colors[][3]      = {
 	[SchemeNorm] = { col_textnorm, col_background, col_windowbordernorm },
 	[SchemeSel]  = { col_textsel, col_backgroundmid, col_windowbordersel }, 
@@ -65,17 +36,17 @@ static const unsigned int alphas[][3]      = {
 };
 
 static const Rule rules[] = {
-	/* class       instance    title       tags mask     isfloating   monitor */
-    { "st",        NULL,       NULL,       3 << 9,        0,           -1 },
-	{ "Surf",      NULL,       NULL,       2 << 9,        0,           -1 },
+	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
+        { "st",        NULL,       NULL,       3 << 9,       0,            0,           -1 },
+	    { "Firefox",   NULL,       NULL,       2 << 9,       0,            0,           -1 },
 };
 
 #include "layouts.c"
 static const Layout layouts[] = {
-    { "tile",    tile },
-	{ "float",   NULL },
+    { "",    tile },
+	{ "",   NULL },
 	{ "mono",    monocle },
-	{ "grid",    grid },
+	{ "",       grid },
 };
 
 #define MODKEY Mod1Mask
@@ -83,25 +54,22 @@ static const Layout layouts[] = {
 	{ MODKEY|ShiftMask,             KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggletag,      {.ui = 1 << TAG} },
 
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } }
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("~/.config/dmenu/dmenu_run") },
+	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("dmenu_run") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("exec flameshot gui && killall flameshot") },
-    { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("~/.config/surf/surf") },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("cd ~/Screenshots && scrot '%Y.png' -s -b -p -q 100 && killall scrot") },
+        { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("firefox") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim") },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall WebKitWebProcess") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("/usr/bin/discord") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("~/.config/surf/surf invidious.namazso.eu") },
-	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st bpytop") },
+        { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall firefox") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("firefox invidious.namazso.eu") },
+	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st htop") },
 	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
-    { MODKEY,                       XK_3,      spawn,          SHCMD("pulsemixer --unmute && pulsemixer --change-volume +2 && killall pulsemixer") },
-    { MODKEY,                       XK_2,      spawn,          SHCMD("pulsemixer --unmute && pulsemixer --change-volume -2 && killall pulsemixer") },
-    { MODKEY,                       XK_1,      spawn,          SHCMD("pulsemixer --mute") },
-	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st pulsemixer") },
+	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st alsamixer") },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp /mnt/storage01/Music/Playlist") }, 
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
