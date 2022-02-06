@@ -1,0 +1,23 @@
+#!/bin/sh
+
+user="$(whoami)"
+
+echo "speedie's scrot helper"
+
+if [ "user" = "root" ]; then
+	echo "Do not run me as root, please." && exit 1
+fi
+
+scrot --help || echo "Scrot is not installed, please install."
+scrot --help && clear
+
+cd ~/Screenshots || echo "Screenshots directory not present, created."
+
+rm -rf ~/Screenshots/.TempScreenshot.png && echo "Deleted temporary screenshot if present"
+
+scrot '.TempScreenshot.png' -s -b -p -q 100 && echo "Took screenshot, saved to ~/.TempScreenshot.png"
+
+xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && echo "Copied image to clipboard."
+
+killall scrot && echo "Killed scrot" && exit 0
+
