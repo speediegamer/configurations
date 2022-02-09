@@ -1,63 +1,68 @@
-# dmenu
-# Slighly modified makefile because I wanna have my dmenu binary in .config/dmenu
-
-# See LICENSE file for copyright and license details.
+# See LICENSE file for copyright and license details
+# slstatus - suckless status monitor
+.POSIX:
 
 include config.mk
 
-SRC = drw.c dmenu.c stest.c util.c
-OBJ = $(SRC:.c=.o)
+REQ = util
+COM =\
+	components/battery\
+	components/cpu\
+	components/datetime\
+	components/disk\
+	components/entropy\
+	components/hostname\
+	components/ip\
+	components/kernel_release\
+	components/keyboard_indicators\
+	components/keymap\
+	components/load_avg\
+	components/netspeeds\
+	components/num_files\
+	components/ram\
+	components/run_command\
+	components/separator\
+	components/swap\
+	components/temperature\
+	components/uptime\
+	components/user\
+	components/volume\
+	components/wifi
 
-all: options dmenu stest
+all: slstatus
 
-options:
-	@echo dmenu build options:
-	@echo "CFLAGS   = $(CFLAGS)"
-	@echo "LDFLAGS  = $(LDFLAGS)"
-	@echo "CC       = $(CC)"
+$(COM:=.o): config.mk $(REQ:=.h)
+slstatus.o: slstatus.c slstatus.h arg.h config.h config.mk $(REQ:=.h)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -o $@ -c $(CPPFLAGS) $(CFLAGS) $<
 
 config.h:
 	cp config.def.h $@
 
-$(OBJ): arg.h config.h config.mk drw.h
-
-dmenu: dmenu.o drw.o util.o
-	$(CC) -o $@ dmenu.o drw.o util.o $(LDFLAGS)
-
-stest: stest.o
-	$(CC) -o $@ stest.o $(LDFLAGS)
+slstatus: slstatus.o $(COM:=.o) $(REQ:=.o)
+	$(CC) -o $@ $(LDFLAGS) $(COM:=.o) $(REQ:=.o) slstatus.o $(LDLIBS)
 
 clean:
-	rm -f dmenu stest $(OBJ) dmenu-$(VERSION).tar.gz
+	rm -f slstatus slstatus.o $(COM:=.o) $(REQ:=.o)
 
-dist: clean
-	mkdir -p dmenu-$(VERSION)
-	cp LICENSE Makefile README arg.h config.def.h config.mk dmenu.1\
-		drw.h util.h dmenu_path dmenu_run stest.1 $(SRC)\
-		dmenu-$(VERSION)
-	tar -cf dmenu-$(VERSION).tar dmenu-$(VERSION)
-	gzip dmenu-$(VERSION).tar
-	rm -rf dmenu-$(VERSION)
+dist:
+	rm -rf "slstatus-$(VERSION)"
+	mkdir -p "slstatus-$(VERSION)/components"
+	cp -R LICENSE Makefile README config.mk config.def.h \
+	      arg.h slstatus.c $(COM:=.c) $(REQ:=.c) $(REQ:=.h) \
+	      slstatus.1 "slstatus-$(VERSION)"
+	tar -cf - "slstatus-$(VERSION)" | gzip -c > "slstatus-$(VERSION).tar.gz"
+	rm -rf "slstatus-$(VERSION)"
 
 install: all
-	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f dmenu_path dmenu_run stest $(DESTDIR)$(PREFIX)/bin 
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_path
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/dmenu_run
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/stest
-	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	sed "s/VERSION/$(VERSION)/g" < dmenu.1 > $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
-	sed "s/VERSION/$(VERSION)/g" < stest.1 > $(DESTDIR)$(MANPREFIX)/man1/stest.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stest.1
-uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu_path\
-		  $(DESTDIR)$(PREFIX)/bin/dmenu_run\
-		  $(DESTDIR)$(PREFIX)/bin/stest\
-		  $(DESTDIR)$(MANPREFIX)/man1/dmenu.1\
-		  $(DESTDIR)$(MANPREFIX)/man1/stest.1
+	mkdir -p "$(DESTDIR)$(PREFIX)/bin"
+	cp -f slstatus "$(DESTDIR)$(PREFIX)/bin"
+	chmod 755 "$(DESTDIR)$(PREFIX)/bin/slstatus"
+	mkdir -p "$(DESTDIR)$(MANPREFIX)/man1"
+	cp -f slstatus.1 "$(DESTDIR)$(MANPREFIX)/man1"
+	chmod 644 "$(DESTDIR)$(MANPREFIX)/man1/slstatus.1"
 
-.PHONY: all options clean dist install uninstall
+uninstall:
+	rm -f "$(DESTDIR)$(PREFIX)/bin/slstatus"
+	rm -f "$(DESTDIR)$(MANPREFIX)/man1/slstatus.1"
