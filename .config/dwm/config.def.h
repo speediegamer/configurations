@@ -5,10 +5,10 @@ static const unsigned int snap                = 32;
 static const unsigned int gappx               = 4;
 static const int showbar                      = 1;
 static const int topbar                       = 1;
-static const char *fonts[]                    = { "Terminus:size=10", "fontawesome:size=12" };
+static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=12" };
 static const char dmenufont[]                 = "Terminus:size=10";
 static const char col_background[]            = "#222222"; // dwm dark bg & slstatus bg
-static const char col_backgroundmid[]         = "#4c566a"; // dwm middle background
+static const char col_backgroundmid[]         = "#222222"; // dwm middle background
 static const char col_textnorm[]              = "#bbbbbb"; // application title bar/font for norm
 static const char col_textsel[]               = "#eeeeee"; // dwm text/font for selected
 static const char col_windowbordernorm[]      = "#5757ff"; // dwm norm window border
@@ -36,17 +36,18 @@ static const unsigned int alphas[][3]      = {
 };
 
 static const Rule rules[] = {
-	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
+    	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
         { "st",        NULL,       NULL,       3 << 9,       0,            0,           -1 },
 	    { "Firefox",   NULL,       NULL,       2 << 9,       0,            0,           -1 },
+		{ "urxvt",     NULL,       NULL,       3 << 9,       0,            0,           -1 },   
 };
 
 #include "layouts.c"
 static const Layout layouts[] = {
-    { "",    tile },
-	{ "",   NULL },
-	{ "mono",    monocle },
-	{ "",       grid },
+    { "",          tile },
+	{ "",          NULL },
+	{ "",       monocle },
+	{ "",          grid },
 };
 
 #define MODKEY Mod1Mask
@@ -54,33 +55,40 @@ static const Layout layouts[] = {
 	{ MODKEY|ShiftMask,             KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggletag,      {.ui = 1 << TAG} },
 
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("dmenu_run") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("cd ~/Screenshots && scrot '%Y.png' -s -b -p -q 100 && killall scrot") },
-        { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("cd ~/Screenshots && rm -rf ~/Screenshots/.TempScreenshot.png && scrot '.TempScreenshot.png' -s -b -p -q 100 && xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && killall scrot") },
+    { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("firefox") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim") },
-        { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall firefox") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall firefox") },
+    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp") },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord") },      
 	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("firefox invidious.namazso.eu") },
+	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("~/.config/st/st yt") },
+	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("firefox https://discord.com/channels/@me") },
 	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st htop") },
+	{ ControlMask|MODKEY,           XK_x,      spawn,          SHCMD("~/.config/st/st btop --utf-force") },
 	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
 	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st alsamixer") },
-	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp /mnt/storage01/Music/Playlist") }, 
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp -T transparent-background /mnt/storage01/Music/Playlist") }, 
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } }, 
-	{ MODKEY,                       XK_Tab,    setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_a,      setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_d,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY|ShiftMask,             XK_e,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ControlMask,           XK_e,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ControlMask,           XK_r,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ControlMask,           XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ControlMask,           XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY,                       XK_d,      focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
