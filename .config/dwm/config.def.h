@@ -5,8 +5,7 @@ static const unsigned int snap                = 32;
 static const unsigned int gappx               = 4;
 static const int showbar                      = 1;
 static const int topbar                       = 1;
-static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=12" };
-static const char dmenufont[]                 = "Terminus:size=10";
+static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=20" };
 static const char col_background[]            = "#222222"; // dwm dark bg & slstatus bg
 static const char col_backgroundmid[]         = "#222222"; // dwm middle background
 static const char col_textnorm[]              = "#bbbbbb"; // application title bar/font for norm
@@ -39,7 +38,8 @@ static const Rule rules[] = {
     	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
         { "st",        NULL,       NULL,       3 << 9,       0,            0,           -1 },
 	    { "Firefox",   NULL,       NULL,       2 << 9,       0,            0,           -1 },
-		{ "urxvt",     NULL,       NULL,       3 << 9,       0,            0,           -1 },   
+		{ "urxvt",     NULL,       NULL,       3 << 9,       0,            0,           -1 },
+		{ "mocp",      NULL,       NULL,       5 << 9,       1,            0,           -1 },
 };
 
 #include "layouts.c"
