@@ -1,5 +1,4 @@
 # dmenu
-# Slighly modified makefile because I wanna have my dmenu binary in .config/dmenu
 
 # See LICENSE file for copyright and license details.
 
@@ -53,11 +52,13 @@ install: all
 	sed "s/VERSION/$(VERSION)/g" < stest.1 > $(DESTDIR)$(MANPREFIX)/man1/stest.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/dmenu.1
 	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/stest.1
+	cp -r dmenu_path dmenu_run stest dmenu /usr/bin
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/dmenu_path\
 		  $(DESTDIR)$(PREFIX)/bin/dmenu_run\
 		  $(DESTDIR)$(PREFIX)/bin/stest\
 		  $(DESTDIR)$(MANPREFIX)/man1/dmenu.1\
 		  $(DESTDIR)$(MANPREFIX)/man1/stest.1
+		  /usr/bin/dmenu_path /usr/bin/dmenu_run /usr/bin/stest /usr/bin/dmenu
 
 .PHONY: all options clean dist install uninstall
