@@ -2,7 +2,7 @@
 // https://github.com/speediegamer/configurations
 static const unsigned int borderpx            = 1;
 static const unsigned int snap                = 32;
-static const unsigned int gappx               = 4;
+static const unsigned int gappx               = 24;
 static const int showbar                      = 1;
 static const int topbar                       = 1;
 static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=20" };
@@ -38,8 +38,10 @@ static const Rule rules[] = {
     	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
         { "st",        NULL,       NULL,       3 << 9,       0,            0,           -1 },
 	    { "Firefox",   NULL,       NULL,       2 << 9,       0,            0,           -1 },
+		{ "Librewolf", NULL,       NULL,       2 << 9,       0,            0,           -1 },
 		{ "urxvt",     NULL,       NULL,       3 << 9,       0,            0,           -1 },
 		{ "mocp",      NULL,       NULL,       5 << 9,       1,            0,           -1 },
+        { "alsamixer", NULL,       NULL,       0,		     1,            0,           -1 },
 };
 
 #include "layouts.c"
@@ -62,15 +64,17 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("dmenu_run") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("cd ~/Screenshots && rm -rf ~/Screenshots/.TempScreenshot.png && scrot '.TempScreenshot.png' -s -b -p -q 100 && xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && killall scrot") },
-    { MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("firefox") },
-	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim") },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall firefox") },
+    { MODKEY|ControlMask,           XK_s,      spawn,          SHCMD("cd ~/Screenshots && rm -rf ~/Screenshots/.TempScreenshot.png && scrot '.TempScreenshot.png' -b -p -q 100 && xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && killall scrot") },
+
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf") },
+	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim ~/") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall librewolf") },
     { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp") },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("firefox invidious.namazso.eu") },
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("librewolf invidious.namazso.eu") },
 	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("~/.config/st/st yt") },
-	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("firefox https://discord.com/channels/@me") },
+	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("librewolf https://discord.com/channels/@me") },
 	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st htop") },
 	{ ControlMask|MODKEY,           XK_x,      spawn,          SHCMD("~/.config/st/st btop --utf-force") },
 	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
