@@ -5,7 +5,13 @@
 
 xclip &
 
-xsetroot -solid '#222222'
+picom &
+
+#xsetroot -solid '#222222' # Old is #222222
+
+setwallpaper-wm & 
+
+modprobe vboxdrv
 
 # !!Keep any new lines above this, dumbass self!!
 ~/.config/dwm/dwm # Execute dynamic window manager!
