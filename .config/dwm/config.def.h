@@ -19,9 +19,8 @@ static const int nmaster                      = 1;
 static const int resizehints                  = 0;
 static char dmenumon[2]                       = "0";
 static const char *dmenucmd[]                 = { NULL };
-static const char *termcmd[]                  = { NULL };
-static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
-static const char *alttags[] = { "[]", "[]", "[]", "[]", "[]", "[]", "[]", "[]", "[]" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *alttags[] = { "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[9]" };
 static const char *colors[][3]      = {
 	[SchemeNorm] = { col_textnorm, col_background, col_windowbordernorm },
 	[SchemeSel]  = { col_textsel, col_backgroundmid, col_windowbordersel }, 
@@ -46,10 +45,10 @@ static const Rule rules[] = {
 
 #include "layouts.c"
 static const Layout layouts[] = {
-    { "",          tile },
-	{ "",          NULL },
-	{ "",       monocle },
-	{ "",          grid },
+    { "",          tile },
+	{ "",          NULL },
+	{ "",       monocle },
+	{ "",          grid },
 };
 
 #define MODKEY Mod1Mask
@@ -61,24 +60,23 @@ static const Layout layouts[] = {
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("dmenu_run") },
+	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("/usr/bin/dmenu_run") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("cd ~/Screenshots && rm -rf ~/Screenshots/.TempScreenshot.png && scrot '.TempScreenshot.png' -s -b -p -q 100 && xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && killall scrot") },
-    { MODKEY|ControlMask,           XK_s,      spawn,          SHCMD("cd ~/Screenshots && rm -rf ~/Screenshots/.TempScreenshot.png && scrot '.TempScreenshot.png' -b -p -q 100 && xclip -in -selection clipboard -target image/png ~/Screenshots/.TempScreenshot.png && killall scrot") },
-
-	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff") },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("maim -sB | xclip -selection clipboard -t image/png") },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff || ~/.config/st/st ranger") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim ~/") },
     { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall librewolf") },
     { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("librewolf invidious.namazso.eu") },
-	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("~/.config/st/st yt") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord-token || ~/.config/st/st 6cord") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("librewolf invidious.namazso.eu || librewolf youtube.com") },
+	{ ControlMask|ShiftMask,        XK_y,      spawn,          SHCMD("~/.config/st/st yt") },
+	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("~/.config/st/st newsboat") },
 	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("librewolf https://discord.com/channels/@me") },
 	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st htop") },
 	{ ControlMask|MODKEY,           XK_x,      spawn,          SHCMD("~/.config/st/st btop --utf-force") },
 	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
-	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st alsamixer") },
+	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st alsamixer || pulsemixer") },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp -T transparent-background /mnt/storage01/Music/Playlist") }, 
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
