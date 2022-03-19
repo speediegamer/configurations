@@ -1,7 +1,6 @@
 # speedie's zshrc
-#
-#
-#
+# Make sure to edit export variables before using.
+
 # Set color based on distro
 if [[ "$(< /etc/os-release)" =~ "void" ]]; then
     export PS1col="[$(tput setf 3)$(whoami)$(tput setf 6)@$(tput setf 11)$(hostname)$(tput setf 4) %d$(tput sgr0)]$ "
@@ -15,79 +14,118 @@ fi
 
 # Export variables
 export EDITOR='nvim'
-export LANG=en_US.UTF-8
+export LANG="en_US.UTF-8"
 export TERM='st-256color'
 export PERM='doas'
 export PLAYER='mpv'
 export TERMINAL='st'
 export BROWSER='librewolf'
-export FETCH="sfetch"
-export PS1="$PS1col"
-export MIXER="alsamixer"
-export LIST="ls" # Just in case I use exa
-export PKGINSTALL="$PERM emerge "
-export PKGREMOVE="$PERM emerge --deselect"
-export PKGCLEAN="$PERM emerge --depclean -a"
-export LISTDEVICE="lsblk"
-export DEVICEINFO="df"
+export FETCH='sfetch'
+export PS1=$PS1col
+export MIXER='alsamixer'
+export LIST='ls'
+export PKGINSTALL='$PERM emerge'
+export PKGREMOVE='$PERM emerge --deselect'
+export PKGCLEAN='$PERM emerge --depclean -a'
+export LISTDEVICE='lsblk'
+export DEVICEINFO='df'
 
-# Aliases
+# Web browser aliases
+alias :w='$BROWSER'
+alias w='$BROWSER https://searx.org'
+
+# Editor aliases
 alias vi=$EDITOR
 alias nvim=$EDITOR
-alias sudo=$PERM
-alias btw=$FETCH
-alias ls='$LIST -lah --color=auto'
-alias mix=$MIXER
-alias getsfetch='rm sfetch ; curl -o sfetch https://raw.githubusercontent.com/speediegamer/sfetch/main/sfetch && chmod +x sfetch'
-alias getconfig='git clone https://github.com/speediegamer/configurations'
-alias :q='exit'
-alias q='exit'
-alias :w='librewolf https://searx.org'
-alias w='librewolf https://searx.org'
 alias :e=$EDITOR
 alias e=$EDITOR
-alias make='make -j$(nproc)'
-alias :de=$PERM $EDITOR
-alias de=$PERM $EDITOR
+alias :de="$PERM $EDITOR"
+alias de="$PERM $EDITOR"
+
+# sudo/doas aliases
+alias sudo=$PERM
+alias :r=$PERM
+
+# fetch aliases
+alias btw=$FETCH
+
+
+# ls aliases
+alias ls='$LIST -lah --color=auto'
+alias mix=$MIXER
+
+# get aliases
+alias getsfetch='rm sfetch ; curl -o sfetch https://raw.githubusercontent.com/speediegamer/sfetch/main/sfetch && chmod +x sfetch'
+alias getconfig='git clone https://github.com/speediegamer/configurations'
+
+# package installation/removal aliases
 alias :i=$PKGINSTALL
 alias :iu=$PKGREMOVE
 alias :id=$PKGCLEAN
+
+# list aliases
 alias :l='$LIST -lah --color=auto'
 alias :lb=$LISTDEVICE
 alias :ld=$DEVICEINFO
+
+# mixer aliases
 alias :a=$MIXER
-alias :c='clear'
-alias :r=$PERM
+
+# General terminal command aliases
 alias Q='exit'
+alias :q='exit'
+alias q='exit'
+alias :c='clear'
+
+# make aliases
+alias make='make -j$(nproc)'
+
+# application
 alias rss='killall mpv ; killall newsboat ; newsboat'
-alias mnt='doas mount /dev/'
-alias zshrc='nvim ~/.zshrc'
-alias bashrc='nvim ~/.bashrc'
-alias urls='nvim ~/.config/newsboat/urls'
-alias kys='doas killall dwm'
+
+# Mount commands
+alias mnt='$PERM mount /dev/'
+
+# Process aliases
+alias kys='$PERM killall dwm'
+
+# "mk" aliases
 alias mkexec='chmod +x'
-alias mp3dl='doas youtube-dl -x --audio-format mp3 --prefer-ffmpeg'
-alias mp4dl='doas youtube-dl -f best --prefer-ffmpeg'
+alias mkdir='mkdir -pv'
+
+# youtube-dl/yt-dlp aliases
+alias mp3dl='$PERM youtube-dl -x --audio-format mp3 --prefer-ffmpeg'
+alias mp4dl='$PERM youtube-dl -f best --prefer-ffmpeg'
+
+# File aliases
+alias urls='$EDITOR ~/.config/newsboat/urls'
+alias bashrc='$EDITOR ~/.bashrc'
+alias zshrc='$EDITOR ~/.zshrc'
+
+# Basic cd aliases
 alias ..='cd ..'
 alias .2='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
-alias mkdir='mkdir -pv'
-alias winget='echo "That OS is so 1984"'
-alias btop='btop --utf-force'
+
+# "GO" aliases
 alias goconfig="cd ~/.config"
 alias godl="cd ~/Downloads"
 alias gostor="cd /mnt/storage01"
-alias gostor1="cd /mnt/storage01"
 alias gostor2="cd /mnt/storage02"
 alias gobin="cd /usr/bin"
 alias gohome="cd ~/"
 alias golocal="cd /usr/local/bin"
 alias gorec="cd ~/OBS\ \Recordings"
 alias goproj="cd ~/Projects"
-alias untar='doas tar xpvf'
-alias unrar='doas unrar x'
+
+# Funny aliases
+alias winget='echo "That OS is so 1984"'
+
+# Extraction aliases
+alias untar='$PERM tar xpvf'
+alias unrar='$PERM unrar x'
 clear
 
 $FETCH
