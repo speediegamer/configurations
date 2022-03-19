@@ -161,6 +161,7 @@ typedef struct {
 } STREscape;
 
 static void execsh(char *, char **);
+static char *getcwd_by_pid(pid_t pid);
 static void stty(char **);
 static void sigchld(int);
 static void ttywriteraw(const char *, size_t);
@@ -1073,6 +1074,37 @@ tswapscreen(void)
 }
 
 void
+newterm(const Arg* a)
+{
+	int res;
+	switch (fork()) {
+	case -1:
+		die("fork failed: %s\n", strerror(errno));
+		break;
+	case 0:
+		switch (fork()) {
+		case -1:
+			die("fork failed: %s\n", strerror(errno));
+			break;
+		case 0:
+			res = chdir(getcwd_by_pid(pid));
+			execlp("st", "./st", NULL);
+			break;
+		default:
+			exit(0);
+		}
+	default:
+		wait(NULL);
+	}
+}
+
+static char *getcwd_by_pid(pid_t pid) {
+	char buf[32];
+	snprintf(buf, sizeof buf, "/proc/%d/cwd", pid);
+	return realpath(buf, NULL);
+}
+
+void
 kscrolldown(const Arg* a)
 {
 	int n = a->i;
@@ -1285,6 +1317,9 @@ tsetchar(Rune u, const Glyph *attr, int x, int y)
 	term.dirty[y] = 1;
 	term.line[y][x] = *attr;
 	term.line[y][x].u = u;
+
+	if (isboxdraw(u))
+		term.line[y][x].mode |= ATTR_BOXDRAW;
 }
 
 void
@@ -2034,10 +2069,8 @@ strhandle(void)
 				fprintf(stderr, "erresc: invalid color j=%d, p=%s\n",
 				        j, p ? p : "(null)");
 			} else {
-				/*
-				 * TODO if defaultbg color is changed, borders
-				 * are dirty
-				 */
+				if (j == defaultbg)
+					xclearwin();
 				redraw();
 			}
 			return;
