@@ -7,6 +7,8 @@ xclip &
 
 picom &
 
+xrdb ~/.Xresources
+
 #xsetroot -solid '#222222' # Old is #222222
 
 setwallpaper-wm & 
