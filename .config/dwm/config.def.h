@@ -1,8 +1,13 @@
 // speedie's Dynamic Window Manager configuration file!
 // https://github.com/speediegamer/configurations
+// Make sure to export variables "BROWSER", "EDITOR" and "TERMINAL" in your .zshrc or .bashrc depending on what shell you're using.
+// This must be the path to a binary.
+
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } } // Change if you're going to use a different shell.
+
 static const unsigned int borderpx            = 1;
 static const unsigned int snap                = 32;
-static const unsigned int gappx               = 24;
+static const unsigned int gappx               = 5;
 static const int showbar                      = 1;
 static const int topbar                       = 1;
 static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=20" };
@@ -56,28 +61,24 @@ static const Layout layouts[] = {
 	{ MODKEY|ShiftMask,             KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggletag,      {.ui = 1 << TAG} },
 
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
-
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("/usr/bin/dmenu_run") },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("~/.config/st/st") },
+	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("/usr/bin/dmenu_run || dmenu_run") },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("$TERMINAL") },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("maim -sB | xclip -selection clipboard -t image/png") },
-	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("~/.config/st/st fff || ~/.config/st/st ranger") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf") },
-	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("~/.config/st/st nvim ~/") },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall librewolf") },
-    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("~/.config/st/st 6cord-token || ~/.config/st/st 6cord") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("librewolf invidious.namazso.eu || librewolf youtube.com") },
-	{ ControlMask|ShiftMask,        XK_y,      spawn,          SHCMD("~/.config/st/st yt") },
-	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("~/.config/st/st newsboat") },
-	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("librewolf https://discord.com/channels/@me") },
-	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("~/.config/st/st htop") },
-	{ ControlMask|MODKEY,           XK_x,      spawn,          SHCMD("~/.config/st/st btop --utf-force") },
-	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD("/usr/bin/obs") },
-	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("~/.config/st/st alsamixer || pulsemixer") },
-	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("~/.config/st/st mocp -T transparent-background /mnt/storage01/Music/Playlist") }, 
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("$TERMINAL fff || $TERMINAL ranger") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("$BROWSER") },
+	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("$TERMINAL $EDITOR") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall $BROWSER || pkill $BROWSER") },
+    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp || pkill mocp") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("$TERMINAL 6cord-token || $TERMINAL 6cord") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("$BROWSER invidious.namazso.eu || $BROWSER youtube.com") },
+	{ ControlMask|ShiftMask,        XK_y,      spawn,          SHCMD("$TERMINAL yt || $TERMINAL ytfzf") },
+	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("$TERMINAL newsboat") },
+	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("$BROWSER https://discord.com/channels/@me") },
+	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("$TERMINAL htop") },
+	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("$TERMINAL alsamixer || $TERMINAL pulsemixer") },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("$TERMINAL mocp -T transparent-background /mnt/storage01/Music/Playlist") }, 
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -112,7 +113,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("~/.config/st/st") },
+	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("$TERMINAL") },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
