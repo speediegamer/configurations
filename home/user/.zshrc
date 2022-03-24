@@ -2,15 +2,20 @@
 # Make sure to edit export variables before using.
 
 # Set color based on distro
-if [[ "$(< /etc/os-release)" =~ "void" ]]; then
+if [[ "$(</etc/os-release)" =~ "void" ]]; then
     export PS1col="[$(tput setf 3)$(whoami)$(tput setf 6)@$(tput setf 11)$(hostname)$(tput setf 4) %d$(tput sgr0)]$ "
-elif [[ "$(< /etc/os-release)" =~ "gentoo" ]]; then
+elif [[ "$(</etc/os-release)" =~ "gentoo" ]]; then
     export PS1col="[$(tput setf 3)$(whoami)$(tput setf 6)@$(tput setf 5)$(hostname)$(tput setf 4) %d$(tput sgr0)]$ "
-elif [[ "$(< /etc/os-release)" =~ "arch" ]]; then
+elif [[ "$(</etc/os-release)" =~ "arch" ]]; then
     export PS1col="[s$(tput setf 3)$(whoami)$(tput setf 6)@$(tput setf 13)$(hostname)$(tput setf 4) %d$(tput sgr0)]$ "
-elif [[ "$(< /etc/os-release)" =~ "artix" ]]; then
+elif [[ "$(</etc/os-release)" =~ "artix" ]]; then
     export PS1col="[$(tput setf 3)$(whoami)$(tput setf 6)@$(tput setf 13)$(hostname)$(tput setf 4) %d$(tput sgr0)]$ "
 fi
+
+# Features
+autoload -Uz compinit
+compinit
+_comp_options+=(globdots)
 
 # Export variables
 export EDITOR='nvim'
@@ -18,8 +23,8 @@ export LANG="en_US.UTF-8"
 export TERM='st-256color'
 export PERM='doas'
 export PLAYER='mpv'
-export TERMINAL='st'
-export BROWSER='librewolf'
+export TERMINAL='~/.config/st/st' # Required to be exported by my dwm configuration!!
+export BROWSER='librewolf' # Required to be exported by my dwm configuration!!
 export FETCH='sfetch'
 export PS1=$PS1col
 export MIXER='alsamixer'
@@ -49,6 +54,8 @@ alias :r=$PERM
 # fetch aliases
 alias btw=$FETCH
 
+# other
+alias yt='ytfzf'
 
 # ls aliases
 alias ls='$LIST -lah --color=auto'
@@ -76,6 +83,9 @@ alias Q='exit'
 alias :q='exit'
 alias q='exit'
 alias :c='clear'
+
+# Package manager aliases
+alias emerge='doas emerge'
 
 # make aliases
 alias make='make -j$(nproc)'
