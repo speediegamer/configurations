@@ -1,0 +1,6 @@
+# package.use# required by www-client/firefox-72.0.2::didos
+# required by firefox (argument)
+>=media-libs/libpng-1.6.37-r2 apng
+# required by www-client/firefox-72.0.2::didos[system-sqlite]
+# required by firefox (argument)
+>=dev-db/sqlite-3.37.2 secure-delete

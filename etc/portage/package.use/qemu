@@ -1,0 +1,1 @@
+app-emulation/qemu -accessibility -bzip2 -capstone -curl -debug -doc -fuse -lzo -jpeg -jack -ncurses numa opengl -pin-upstream-blobs -png -pulseaudio -smartcard spice -ssh -test usb udev -usbredir vhost-net virgl -vnc vte -xfs gtk

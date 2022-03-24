@@ -1,0 +1,9 @@
+# package.use# required by x11-base/xorg-x11-7.4-r3::gentoo
+# required by xorg-x11 (argument)
+>=x11-base/xorg-server-21.1.3 -minimal
+# required by media-libs/mesa-21.3.5::gentoo
+# required by virtual/opengl-7.0-r2::gentoo
+# required by x11-apps/xdriinfo-1.0.6-r1::gentoo
+# required by x11-base/xorg-x11-7.4-r3::gentoo
+# required by xorg-x11 (argument)
+>=media-libs/libglvnd-1.4.0 X
