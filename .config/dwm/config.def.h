@@ -5,28 +5,29 @@
 
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } } // Change if you're going to use a different shell.
 
-static const unsigned int borderpx            = 1;
-static const unsigned int snap                = 32;
+static unsigned int borderpx                  = 1;
+static unsigned int snap                      = 32;
 static const unsigned int gappx               = 5;
-static const int showbar                      = 1;
-static const int topbar                       = 1;
-static const char *fonts[]                    = { "Terminus:size=8", "fontawesome:size=20" };
-static const char col_background[]            = "#222222"; // dwm dark bg & slstatus bg
-static const char col_backgroundmid[]         = "#222222"; // dwm middle background
-static const char col_textnorm[]              = "#bbbbbb"; // application title bar/font for norm
-static const char col_textsel[]               = "#eeeeee"; // dwm text/font for selected
-static const char col_windowbordernorm[]      = "#5757ff"; // dwm norm window border
-static const char col_windowbordersel[]       = "#5757ff"; // dwm sel window border
+static int showbar                            = 1;
+static int topbar                             = 1;
+static char font[]                            = "Terminus:size=8";
+static const char *fonts[]                    = { font };
+static char col_background[]                  = "#222222"; // dwm dark bg & slstatus bg
+static char col_backgroundmid[]               = "#222222"; // dwm middle background
+static char col_textnorm[]                    = "#bbbbbb"; // application title bar/font for norm
+static char col_textsel[]                     = "#eeeeee"; // dwm text/font for selected
+static char col_windowbordernorm[]            = "#5757ff"; // dwm norm window border
+static char col_windowbordersel[]             = "#5757ff"; // dwm sel window border
 static const unsigned int baralpha            = 0xd0;
 static const unsigned int borderalpha         = OPAQUE;
-static const float mfact                      = 0.50;
-static const int nmaster                      = 1;
-static const int resizehints                  = 0;
+static float mfact                            = 0.50;
+static int nmaster                            = 1;
+static int resizehints                        = 0;
 static char dmenumon[2]                       = "0";
 static const char *dmenucmd[]                 = { NULL };
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const char *alttags[] = { "[1]", "[2]", "[3]", "[4]", "[5]", "[6]", "[7]", "[8]", "[9]" };
-static const char *colors[][3]      = {
+static char *colors[][3]      = {
 	[SchemeNorm] = { col_textnorm, col_background, col_windowbordernorm },
 	[SchemeSel]  = { col_textsel, col_backgroundmid, col_windowbordersel }, 
 //                       text         background         window border
@@ -60,6 +61,30 @@ static const Layout layouts[] = {
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY|ShiftMask,             KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggletag,      {.ui = 1 << TAG} },
+
+/*
+* Xresources preferences to load at startup
+*/
+ResourcePref resources[] = {
+       { "font",                 STRING,  &font },
+       { "col_background",       STRING,  &col_background },
+       { "col_backgroundmid",    STRING,  &col_backgroundmid },
+       { "col_textnorm",         STRING,  &col_textnorm },
+       { "col_windowbordersel",  STRING,  &col_windowbordersel },
+       { "col_windowbordernorm", STRING,  &col_windowbordernorm },
+       { "col_textsel",          STRING,  &col_textsel },
+       { "borderpx",             INTEGER, &borderpx }, 
+	   { "snap",                 INTEGER, &snap },
+       { "showbar",              INTEGER, &showbar },
+       { "topbar",               INTEGER, &topbar },
+       { "nmaster",              INTEGER, &nmaster },
+       { "resizehints",          INTEGER, &resizehints },
+       { "mfact",                FLOAT,   &mfact },
+};
+
+
+
+
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
