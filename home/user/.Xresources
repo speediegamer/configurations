@@ -1,3 +1,4 @@
+!! ST
 ! special
 *.foreground:   #e7e7e7
 *.background:   #202020
@@ -36,9 +37,25 @@
 *.color15:      #f7f5f5
 
 ! alpha
-*.alpha:        0.9
+*.alpha:        0.1
 
+!! DWM
+dwm.nmaster: 1
+dwm.font: Terminus:size=8
+dwm.col_background: #222222
+dwm.col_backgroundmid: #222222
+dwm.col_textnorm: #bbbbbb
+dwm.col_textsel: #eeeeee
+dwm.col_windowbordersel: #5757ff
+dwm.col_windowbordernorm: #5757ff
+dwm.borderpx: 1
+dwm.snap: 32
+dwm.showbar: 1
+dwm.topbar: 1
+dwm.resizehints: 0
+dwm.mfact: 0.50
 
+!! URXVT
 URxvt.font: xft:Terminus:style=Mono:pixelsize=15.5:antialias=true:autohint=false
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
