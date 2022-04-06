@@ -3,14 +3,12 @@
 // Make sure to export variables "BROWSER", "EDITOR" and "TERMINAL" in your .zshrc or .bashrc depending on what shell you're using.
 // This must be the path to a binary.
 
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } } // Change if you're going to use a different shell.
-
 static unsigned int borderpx                  = 1;
 static unsigned int snap                      = 32;
 static const unsigned int gappx               = 5;
 static int showbar                            = 1;
 static int topbar                             = 1;
-static char font[]                            = "Terminus:size=8";
+static char font[]                            = { "Terminus:size=8" };
 static const char *fonts[]                    = { font };
 static char col_background[]                  = "#222222"; // dwm dark bg & slstatus bg
 static char col_backgroundmid[]               = "#222222"; // dwm middle background
@@ -18,8 +16,27 @@ static char col_textnorm[]                    = "#bbbbbb"; // application title 
 static char col_textsel[]                     = "#eeeeee"; // dwm text/font for selected
 static char col_windowbordernorm[]            = "#5757ff"; // dwm norm window border
 static char col_windowbordersel[]             = "#5757ff"; // dwm sel window border
+static char col_tag1[]                        = "#ff0000"; // tag 1 background
+static char col_tag1_text[]                   = "#ffffff"; // tag 1 text (fg)
+static char col_tag2[]                        = "#ff7f00"; // tag 2 background
+static char col_tag2_text[]                   = "#ffffff"; // tag 2 text (fg)
+static char col_tag3[]                        = "#ffff00"; // tag 3 background
+static char col_tag3_text[]                   = "#000000"; // tag 3 text (fg)
+static char col_tag4[]                        = "#00ff00"; // tag 4 background
+static char col_tag4_text[]                   = "#000000"; // tag 4 text (fg)
+static char col_tag5[]                        = "#0000ff"; // tag 5 background
+static char col_tag5_text[]                   = "#ffffff"; // tag 5 text (fg)
+static char col_tag6[]                        = "#0000ff"; // tag 6 background
+static char col_tag6_text[]                   = "#ffffff"; // tag 6 text (fg)
+static char col_tag7[]                        = "#9400d3"; // tag 7 background
+static char col_tag7_text[]                   = "#ffffff"; // tag 7 text (fg)
+static char col_tag8[]                        = "#ffffff"; // tag 8 background
+static char col_tag8_text[]                   = "#000000"; // tag 8 text (fg)
+static char col_tag9[]                        = "#000000"; // tag 9 background
+static char col_tag9_text[]                   = "#ffffff"; // tag 9 text (fg)
 static const unsigned int baralpha            = 0xd0;
 static const unsigned int borderalpha         = OPAQUE;
+static int lockfullscreen                     = 1;
 static float mfact                            = 0.50;
 static int nmaster                            = 1;
 static int resizehints                        = 0;
@@ -38,6 +55,21 @@ static const unsigned int alphas[][3]      = {
        [SchemeNorm] = { OPAQUE, baralpha, borderalpha },
        [SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
+
+static char *tagsel[][2] = {
+	{ col_tag1_text, col_tag1 }, 
+	{ col_tag2_text, col_tag2 },
+	{ col_tag3_text, col_tag3 },
+	{ col_tag4_text, col_tag4 },
+	{ col_tag5_text, col_tag5 },
+	{ col_tag6_text, col_tag6 },
+	{ col_tag7_text, col_tag7 },
+	{ col_tag8_text, col_tag8 },
+	{ col_tag9_text, col_tag9 },
+	// Text       Background
+};
+
+static const unsigned int tagalpha[] = { OPAQUE, baralpha };
 
 static const Rule rules[] = {
     	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
@@ -72,9 +104,28 @@ ResourcePref resources[] = {
        { "col_textnorm",         STRING,  &col_textnorm },
        { "col_windowbordersel",  STRING,  &col_windowbordersel },
        { "col_windowbordernorm", STRING,  &col_windowbordernorm },
-       { "col_textsel",          STRING,  &col_textsel },
-       { "borderpx",             INTEGER, &borderpx }, 
-	   { "snap",                 INTEGER, &snap },
+	   { "col_textsel",          STRING,  &col_textsel },
+	   { "col_tag1",             STRING,  &col_tag1 },
+	   { "col_tag1_text",        STRING,  &col_tag1_text },
+	   { "col_tag2",             STRING,  &col_tag2 },
+	   { "col_tag2_text",        STRING,  &col_tag2_text },
+	   { "col_tag3",             STRING,  &col_tag3 },
+	   { "col_tag3_text",        STRING,  &col_tag3_text },
+	   { "col_tag4",             STRING,  &col_tag4 },
+	   { "col_tag4_text",        STRING,  &col_tag4_text },
+	   { "col_tag5",             STRING,  &col_tag5 },
+	   { "col_tag5_text",        STRING,  &col_tag5_text },
+	   { "col_tag6",             STRING,  &col_tag6 },
+	   { "col_tag6_text",        STRING,  &col_tag6_text },
+	   { "col_tag7",             STRING,  &col_tag7 },
+	   { "col_tag7_text",        STRING,  &col_tag7_text },
+	   { "col_tag8",             STRING,  &col_tag8 },
+	   { "col_tag8_text",        STRING,  &col_tag8_text },
+	   { "col_tag9",             STRING,  &col_tag9 },
+	   { "col_tag9_text",        STRING,  &col_tag9_text },
+       { "lockfullscreen",       INTEGER, &lockfullscreen },
+	   { "borderpx",             INTEGER, &borderpx }, 
+       { "snap",                 INTEGER, &snap },
        { "showbar",              INTEGER, &showbar },
        { "topbar",               INTEGER, &topbar },
        { "nmaster",              INTEGER, &nmaster },
@@ -82,28 +133,27 @@ ResourcePref resources[] = {
        { "mfact",                FLOAT,   &mfact },
 };
 
-
-
-
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD("/usr/bin/dmenu_run || dmenu_run") },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("$TERMINAL") },
-	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD("maim -sB | xclip -selection clipboard -t image/png") },
-	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD("$TERMINAL fff || $TERMINAL ranger") },
-	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("$BROWSER") },
-	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD("$TERMINAL $EDITOR") },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("killall $BROWSER || pkill $BROWSER") },
-    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD("killall mocp || pkill mocp") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("$TERMINAL 6cord-token || $TERMINAL 6cord") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD("$BROWSER invidious.namazso.eu || $BROWSER youtube.com") },
-	{ ControlMask|ShiftMask,        XK_y,      spawn,          SHCMD("$TERMINAL yt || $TERMINAL ytfzf") },
-	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD("$TERMINAL newsboat") },
-	{ ControlMask|ShiftMask,        XK_d,      spawn,          SHCMD("$BROWSER https://discord.com/channels/@me") },
-	{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("$TERMINAL htop") },
-	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD("$TERMINAL alsamixer || $TERMINAL pulsemixer") },
-	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD("$TERMINAL mocp -T transparent-background /mnt/storage01/Music/Playlist") }, 
+	{ MODKEY|ShiftMask,             XK_comma,  spawn,          SHCMD(". ~/.config/dwm-applications && $DMENU_RUN") },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL") },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD(". ~/.config/dwm-applications && maim -sB | xclip -selection clipboard -t image/png") },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $FILEMANAGER") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER") },
+	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD(". ~/.config/dwm-applications && ~/Scripts/dfmpeg") },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && ~/Scripts/genpkg") },
+	{ ControlMask|ShiftMask,        XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $EMAIL") },
+	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $EDITOR") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && killall $BROWSER || pkill $BROWSER") },
+    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && killall $PLAYER_BIN || pkill $PLAYER_BIN") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER https://discord.com/channels/@me") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER invidious.namazso.eu || $BROWSER youtube.com") },
+	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL newsboat") },
+    { ControlMask|ShiftMask,        XK_4,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER https://4chan.org/g/") },
+	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $MIXER") },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $PLAYER") }, 
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -138,7 +188,7 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("$TERMINAL") },
+	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("~/.config/st/st") },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },

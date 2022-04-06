@@ -1,0 +1,16 @@
+# This file is a list of applications that dwm will use.
+# Edit this to match your system.
+# Make sure this is present in the same folder your dwm binary is.
+
+TERMINAL=~/.config/st/st
+EDITOR=vim
+DMENU_RUN=/usr/bin/dmenu_run
+BROWSER=librewolf
+MIXER=alsamixer
+MUSICDIR=/mnt/storage01/Music/Playlist
+PLAYER="mocp -T transparent-background $MUSICDIR"
+PLAYER_BIN=mocp
+EMAIL=neomutt
+CHAN="https://4chan.org/g/"
+FILEMANAGER=vifm
+RSS=newsboat
