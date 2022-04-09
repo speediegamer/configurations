@@ -3,43 +3,39 @@
 *.foreground:   #e7e7e7
 *.background:   #202020
 *.cursorColor:  #e7e7e7
-
 ! black
 *.color0:       #262626
 *.color8:       #737373
-
 ! red
 *.color1:       #ff3534
 *.color9:       #ff4f4c
-
 ! green
 *.color2:       #35b723
 *.color10:      #82ff6e
-
 ! yellow
 *.color3:       #eae804
 *.color11:      #dfff52
-
 ! blue
 *.color4:       #362be4
 *.color12:      #5767ff
-
 ! magenta
 *.color5:       #fa9cf8
 *.color13:      #cf89cf
-
 ! cyan
 *.color6:       #4ed4d4
 *.color14:      #68efef
-
 ! white
 *.color7:       #bebebe
 *.color15:      #f7f5f5
-
 ! alpha
-*.alpha:        0.1
+*.alpha:        0.9
+! font
+*.font:         Terminus:pixelsize=15.5:antialias=true:autohint=true;
 
 !! DWM
+!! NOTE: dwm .Xresources patch does not like xrdb running in the background
+!! Correct: xrdb /path/to/Xresources
+!! Incorrect: xrdb /path/to/Xresources &
 dwm.nmaster: 1
 dwm.font: Terminus:size=8
 dwm.col_background: #222222
@@ -48,6 +44,24 @@ dwm.col_textnorm: #bbbbbb
 dwm.col_textsel: #eeeeee
 dwm.col_windowbordersel: #5757ff
 dwm.col_windowbordernorm: #5757ff
+dwm.col_tag1: #333333
+dwm.col_tag1_text: #eeeeee
+dwm.col_tag2: #333333
+dwm.col_tag2_text: #eeeeee
+dwm.col_tag3: #333333
+dwm.col_tag3_text: #eeeeee
+dwm.col_tag4: #333333
+dwm.col_tag4_text: #eeeeee
+dwm.col_tag5: #333333
+dwm.col_tag5_text: #eeeeee
+dwm.col_tag6: #333333
+dwm.col_tag6_text: #eeeeee
+dwm.col_tag7: #333333
+dwm.col_tag7_text: #eeeeee
+dwm.col_tag8: #333333
+dwm.col_tag8_text: #eeeeee
+dwm.col_tag9: #333333
+dwm.col_tag9_text: #eeeeee
 dwm.borderpx: 1
 dwm.snap: 32
 dwm.showbar: 1
