@@ -1,15 +1,16 @@
 // speedie's Dynamic Window Manager configuration file!
 // https://github.com/speediegamer/configurations
-// Make sure to export variables "BROWSER", "EDITOR" and "TERMINAL" in your .zshrc or .bashrc depending on what shell you're using.
-// This must be the path to a binary.
 
+#define ICONSIZE 16                           // Icon size
+#define ICONSPACING 5                         // Space between icon and title
 static unsigned int borderpx                  = 1;
 static unsigned int snap                      = 32;
 static const unsigned int gappx               = 5;
 static int showbar                            = 1;
 static int topbar                             = 1;
 static char font[]                            = { "Terminus:size=8" };
-static const char *fonts[]                    = { font };
+static char font2[]                           = { "fontawesome:size=8" };
+static const char *fonts[]                    = { font, font2 };
 static char col_background[]                  = "#222222"; // dwm dark bg & slstatus bg
 static char col_backgroundmid[]               = "#222222"; // dwm middle background
 static char col_textnorm[]                    = "#bbbbbb"; // application title bar/font for norm
@@ -56,6 +57,7 @@ static const unsigned int alphas[][3]      = {
        [SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
+// Do not edit these.
 static char *tagsel[][2] = {
 	{ col_tag1_text, col_tag1 }, 
 	{ col_tag2_text, col_tag2 },
@@ -70,7 +72,6 @@ static char *tagsel[][2] = {
 };
 
 static const unsigned int tagalpha[] = { OPAQUE, baralpha };
-
 static const Rule rules[] = {
     	/* class       instance    title       tags mask     CenterFirst   isfloating   monitor */
         { "st",        NULL,       NULL,       3 << 9,       0,            0,           -1 },
@@ -142,18 +143,23 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          SHCMD(". ~/.config/dwm-applications && maim -sB | xclip -selection clipboard -t image/png") },
 	{ MODKEY|ShiftMask,             XK_f,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $FILEMANAGER") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER") },
-	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD(". ~/.config/dwm-applications && ~/Scripts/dfmpeg") },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && ~/Scripts/genpkg") },
+	{ MODKEY|ShiftMask,             XK_o,      spawn,          SHCMD(". ~/.config/dwm-applications && dfmpeg || ~/Scripts/dfmpeg") },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && genpkg || ~/Scripts/genpkg") },
+	{ MODKEY|ShiftMask,             XK_c,      spawn,          SHCMD(". ~/.config/dwm-applications && copyout || ~/Scripts/copyout") },
 	{ ControlMask|ShiftMask,        XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $EMAIL") },
 	{ MODKEY|ShiftMask,             XK_t,	   spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $EDITOR") },
-    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && killall $BROWSER || pkill $BROWSER") },
-    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && killall $PLAYER_BIN || pkill $PLAYER_BIN") },
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER https://discord.com/channels/@me") },      
-	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER invidious.namazso.eu || $BROWSER youtube.com") },
-	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL newsboat") },
-    { ControlMask|ShiftMask,        XK_4,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER https://4chan.org/g/") },
+    { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD(". ~/.config/dwm-applications && pkill $BROWSER") },
+    { MODKEY|ControlMask,           XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && pkill $PLAYER_BIN") },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER --new-tab https://discord.com/channels/@me") },      
+	{ MODKEY|ShiftMask,             XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER --new-tab $INV_INSTANCE") },
+	{ ControlMask|MODKEY,           XK_y,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $RSS") },
+    { ControlMask|ShiftMask,        XK_4,      spawn,          SHCMD(". ~/.config/dwm-applications && $BROWSER $CHAN") },
 	{ MODKEY|ShiftMask,             XK_a,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $MIXER") },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $PLAYER") }, 
+    { MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD(". ~/.config/dwm-applications && $TERMINAL $STAT") },
+	{ ShiftMask|ControlMask,        XK_1,      spawn,          SHCMD("amixer -c 0 set Master 100%-") },
+	{ ShiftMask|ControlMask,        XK_2,      spawn,          SHCMD("amixer -c 0 set Master 7%-") },
+	{ ShiftMask|ControlMask,        XK_3,      spawn,          SHCMD("amixer -c 0 set Master 7%+") },
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },

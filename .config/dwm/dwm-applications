@@ -14,3 +14,5 @@ EMAIL=neomutt
 CHAN="https://4chan.org/g/"
 FILEMANAGER=vifm
 RSS=newsboat
+STAT=htop
+INV_INSTANCE=yewtu.be

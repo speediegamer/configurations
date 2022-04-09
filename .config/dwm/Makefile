@@ -37,6 +37,7 @@ dist: clean
 	rm -rf dwm-${VERSION}
 
 install: all
+    ls /usr/bin/xrdb || echo "Missing dependency: xrdb" && exit 1
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin && cp dwm-applications ${DWMAPPLICATIONS}
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
